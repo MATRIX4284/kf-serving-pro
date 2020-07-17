@@ -1,0 +1,29 @@
+apiVersion: "serving.kubeflow.org/v1alpha2"
+kind: "InferenceService"
+metadata:
+  name: "imagenet"
+spec:
+  default:
+    predictor:
+      tensorflow:
+        storageUri: "gs://seldon-models/tfserving/imagenet/model"
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 5Gi                        
+          limits:
+            memory: 10Gi
+    explainer:
+      alibi:
+        type: AnchorImages
+        storageUri: "gs://seldon-models/tfserving/imagenet/alibi/0.4.0"
+        config:
+          batch_size: "25"
+          stop_on_first: "True"
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 5Gi            
+          limits:
+            memory: 10Gi
+        

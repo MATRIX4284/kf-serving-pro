@@ -1,0 +1,3 @@
+domain: serving.kubeflow.org
+repo: github.com/kubeflow/kfserving
+version: "2"
