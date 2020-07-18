@@ -906,10 +906,10 @@ data:
             ]
         },
         "pytorch": {
-            "image": "gcr.io/kfserving/pytorchserver",
-            "defaultImageVersion": "0.2.2",
+            "image": "kaustav4284/pytorchserver",
+            "defaultImageVersion": "latest",
             "allowedImageVersions": [
-               "0.2.2"
+               "latest"
             ]
         },
         "tensorrt": {
