@@ -20,7 +20,7 @@ import importlib
 import sys
 
 PYTORCH_FILE = "model.pt"
-
+a=1
 
 class PyTorchModel(kfserving.KFModel):
     def __init__(self, name: str, model_class_name: str, model_dir: str):
