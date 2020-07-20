@@ -2,6 +2,7 @@ apiVersion: "serving.kubeflow.org/v1alpha2"
 kind: "InferenceService"
 metadata:
   name: "pytorch-cifar10-folder"
+  autoscaling.knative.dev/target: "2"
 spec:
   default:
     predictor:

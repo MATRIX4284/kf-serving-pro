@@ -33,29 +33,45 @@ class PyTorchModel(kfserving.KFModel):
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
     def load(self):
-        model_file_dir = './example_model/'
+        model_file_dir = './pytorchserver/example_model/'
         model_file = os.path.join(model_file_dir, PYTORCH_FILE)
         py_files = []
-        for filename in os.listdir(model_file_dir):
-            if filename.endswith('.py'):
-                py_files.append(filename)
-        if len(py_files) == 1:
-            model_class_file = os.path.join(model_file_dir, py_files[0])
-        elif len(py_files) == 0:
-            raise Exception('Missing PyTorch Model Class File.')
-        else:
-            raise Exception('More than one Python file is detected',
-                            'Only one Python file is allowed within model_dir.')
-        model_class_name = self.model_class_name
+        #for filename in os.listdir(model_file_dir):
+        #    if filename.endswith('.py'):
+        #        py_files.append(filename)
+        #if len(py_files) == 1:
+        #    model_class_file = os.path.join(model_file_dir, py_files[0])
+        #elif len(py_files) == 0:
+        #    raise Exception('Missing PyTorch Model Class File.')
+        #else:
+        #    raise Exception('More than one Python file is detected',
+        #                    'Only one Python file is allowed within model_dir.')
+        #model_class_name = self.model_class_name
 
         # Load the python class into memory
-        sys.path.append(os.path.dirname(model_class_file))
-        modulename = os.path.basename(model_class_file).split('.')[0].replace('-', '_')
-        model_class = getattr(importlib.import_module(modulename), model_class_name)
+        #sys.path.append(os.path.dirname(model_class_file))
+        #modulename = os.path.basename(model_class_file).split('.')[0].replace('-', '_')
+        #model_class = getattr(importlib.import_module(modulename), model_class_name)
 
         # Make sure the model weight is transform with the right device in this machine
-        self.model = model_class().to(self.device)
-        self.model.load_state_dict(torch.load(model_file, map_location=self.device))
+        #self.model = model_class().to(self.device)
+        #self.model.load_state_dict(torch.load(model_file, map_location=self.device))
+        #outfile = open('output.csv','a')
+        import wideresnet 
+        self.model = wideresnet.resnet18(num_classes=365)
+        self.model.load_state_dict(torch.load(model_file))
+        #model.load_state_dict(torch.load('./models/wideresnet18_places365.pth'))
+        #params = list(model.parameters())
+        #from UncertaintySampling import UncertaintySampling
+        #device = torch.device('cuda:1')
+        if torch.cuda.is_available():
+            self.device = torch.device('cuda:1')
+            print("Train on GPU.")
+        else:
+            print("No cuda available")
+            self.device = torch.device('cpu')
+
+        self.model.to(self.device)
         self.model.eval()
         self.ready = True
 

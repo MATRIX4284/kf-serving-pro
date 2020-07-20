@@ -1,0 +1,11 @@
+apiVersion: "serving.kubeflow.org/v1alpha2"
+kind: "InferenceService"
+metadata:
+  name: "house365-model-serve"
+  autoscaling.knative.dev/target: "2"
+spec:
+  default:
+    predictor:
+      pytorch:
+        storageUri: "gs://kfserving-samples/models/pytorch/cifar10/"
+        modelClassName: "Net"
